@@ -1,0 +1,7 @@
+# Todos los archivos de texto con saltos de línea LF (evita diffs "fantasma" entre Windows y Mac/Linux)
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.ico binary
+*.pdf binary

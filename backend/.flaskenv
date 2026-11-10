@@ -1,0 +1,4 @@
+# Configuración pública del comando `flask` (sin secretos, sí se sube a Git).
+FLASK_APP=run.py
+FLASK_DEBUG=1
+FLASK_RUN_PORT=5000

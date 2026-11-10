@@ -1,0 +1,29 @@
+# ---------- Secretos ----------
+.env
+*.local
+
+# ---------- Python / backend ----------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+backend/instance/
+*.db
+*.sqlite3
+
+# ---------- Node / frontend ----------
+node_modules/
+dist/
+coverage/
+*.log
+
+# ---------- Editores y sistema ----------
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.DS_Store
+Thumbs.db

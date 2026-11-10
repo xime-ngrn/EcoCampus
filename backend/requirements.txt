@@ -1,0 +1,12 @@
+# Dependencias del backend de EcoCampus.
+# Instalar con:  pip install -r requirements.txt
+# Si agregas una librería, anótala aquí (con su versión mínima) para que todo el equipo la tenga.
+
+Flask>=3.1
+Flask-Cors>=6.0
+Flask-SQLAlchemy>=3.1
+Flask-Migrate>=4.1
+python-dotenv>=1.1
+
+# Pruebas
+pytest>=8.4
