@@ -19,7 +19,7 @@ Sistema web de gestión ambiental y economía circular para la Escuela Superior 
 ### Integrantes del Proyecto
 | Nombre | Usuario de GitHub | Perfil |
 | :--- | :---: | :---: |
-| Oscar Moreno Juárez | `` | [Github](https://github.com) |
+| Oscar Moreno Juárez | `oscareyabs` | [Github](https://github.com/oscareyabs) |
 | Ximena Moreno Noguerón | `xime-ngrn` | [Github](https://github.com/xime-ngrn) |
 | Andrik Páez Gómez | `AndrikPG` | [Github](https://github.com/AndrikPG) |
 | Iván Pérez Mendoza | `IvanPerezMend` | [Github](https://github.com/IvanPerezMend) |
