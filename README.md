@@ -13,6 +13,7 @@ Sistema web de gestión ambiental y economía circular para la Escuela Superior 
 - [Estructura del repositorio](#estructura-del-repositorio)
 - [División del trabajo por módulos](#división-del-trabajo-por-módulos)
 - [Instalación y ejecución local](#instalación-y-ejecución-local)
+- [Despliegue en Railway](#despliegue-en-railway)
 - [Flujo de trabajo con Git](#flujo-de-trabajo-con-git)
 
 
@@ -245,6 +246,50 @@ npm run dev
 | `backend/`  | `flask db upgrade`         | Aplica las migraciones a la base de datos    |
 
 > La primera vez que haya modelos, inicializar las migraciones con `flask db init`.
+
+---
+
+## Despliegue en Railway
+
+En producción corre **un solo servicio**: el `Dockerfile` de la raíz compila el frontend y Flask
+(con Gunicorn) atiende `/api/*` y también sirve el build de Vue. Así ambos comparten dominio y no
+hace falta CORS. La base de datos es un servicio PostgreSQL de Railway.
+
+| Archivo | Qué hace |
+| --- | --- |
+| `Dockerfile` | Compila Vue (`npm ci` + `npm run build`), instala el backend y arranca Gunicorn |
+| `railway.json` | Le dice a Railway que use el Dockerfile y revise `/api/health` antes de publicar |
+| `.dockerignore` | Evita copiar `.env`, `node_modules`, `.venv`, bases SQLite, etc. |
+
+**Variables del servicio** (pestaña *Variables* en Railway):
+
+| Variable | Valor |
+| --- | --- |
+| `DATABASE_URL` | `${{Postgres.DATABASE_URL}}` (referencia al servicio de PostgreSQL) |
+| `SECRET_KEY` | Cadena aleatoria: `python -c "import secrets; print(secrets.token_hex(32))"` |
+| `VITE_USE_MOCKS` | `true` mientras el backend no tenga los endpoints; `false` cuando ya los tenga |
+
+### Base de datos compartida
+
+El código siempre lee la variable `DATABASE_URL`; lo único que cambia es su valor según dónde corre:
+
+| Dónde | Valor de `DATABASE_URL` | Se define en |
+| --- | --- | --- |
+| Railway (despliegue) | `${{Postgres.DATABASE_URL}}`: red privada, no sale a internet | Variables del servicio EcoCampus |
+| Computadora de cada integrante | Valor de `DATABASE_PUBLIC_URL` del servicio Postgres | `backend/.env` (copiado de `backend/.env.example`) |
+
+- La URL pública incluye la contraseña: **nunca la subas a Git** ni la pegues en issues o PRs.
+- El esquema está en `backend/db/schema.sql` y ya está cargado en Railway. Los modelos de
+  SQLAlchemy deben usar los mismos nombres de tablas y columnas.
+- El esquema vive en la base de Railway. Todos trabajan sobre los mismos datos, incluidos los
+  del despliegue, así que no borren ni modifiquen tablas sin avisar al Módulo 1.
+
+- Cada deploy corre `flask db upgrade` automáticamente si existe la carpeta `backend/migrations/`.
+  Por eso **toda migración debe subirse a Git** junto con el cambio del modelo.
+- El disco del contenedor se borra en cada deploy. Las evidencias (RF11) deben guardarse en un
+  volumen de Railway o en un almacenamiento externo, no en una carpeta local del backend.
+- Para probar la imagen en tu máquina: `docker build -t ecocampus .` y
+  `docker run --rm -p 8000:8000 -e PORT=8000 ecocampus` → http://localhost:8000
 
 ---
 
