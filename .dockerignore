@@ -1,0 +1,16 @@
+# Lo que NO se copia a la imagen de Docker (acelera el build y evita filtrar secretos).
+.git
+**/.env
+**/*.local
+**/node_modules
+**/dist
+**/.venv
+**/venv
+**/__pycache__
+**/*.py[cod]
+**/.pytest_cache
+**/*.db
+**/*.sqlite3
+backend/instance
+.vscode
+.idea
